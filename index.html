@@ -685,6 +685,56 @@ section{padding:100px 0;scroll-margin-top:80px;position:relative}
 .review-author h5{font-size:.95rem;color:var(--text-primary);margin-bottom:2px}
 .review-author small{font-size:.78rem;color:var(--text-muted)}
 
+/* CERTIFICATIONS & SECURITY RESEARCH */
+.certs-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px}
+.cert-card{
+  background:var(--bg-card);border:1px solid var(--border-light);
+  border-radius:var(--radius-md);overflow:hidden;
+  transition:var(--transition);position:relative;
+  display:flex;flex-direction:column;
+}
+.cert-card:hover{border-color:var(--border-hover);transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.cert-card.type-report{border-left:3px solid var(--rose)}
+.cert-card.type-award{border-left:3px solid var(--gold)}
+.cert-card.type-cert{border-left:3px solid var(--accent)}
+.cert-img-wrap{
+  aspect-ratio:16/9;background:var(--bg-glass);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;position:relative;
+}
+.cert-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.cert-card:hover .cert-img-wrap img{transform:scale(1.05)}
+.cert-img-placeholder{
+  width:100%;height:100%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(135deg,rgba(6,182,212,.08),rgba(139,92,246,.08));
+}
+.cert-img-placeholder i{font-size:2.4rem;opacity:.6}
+.cert-type-badge{
+  position:absolute;top:10px;left:10px;
+  padding:4px 10px;border-radius:999px;font-size:.68rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.cert-type-badge.badge-cert{background:rgba(6,182,212,.18);color:var(--accent);border:1px solid rgba(6,182,212,.3)}
+.cert-type-badge.badge-award{background:rgba(251,191,36,.18);color:var(--gold);border:1px solid rgba(251,191,36,.3)}
+.cert-type-badge.badge-report{background:rgba(244,63,94,.18);color:var(--rose);border:1px solid rgba(244,63,94,.3)}
+.cert-body{padding:18px;flex:1;display:flex;flex-direction:column}
+.cert-issuer{font-size:.75rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.cert-title{font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;line-height:1.3}
+.cert-desc{font-size:.84rem;color:var(--text-secondary);line-height:1.6;margin-bottom:14px;flex:1}
+.cert-actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}
+.cert-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:8px;font-size:.8rem;font-weight:700;
+  border:1px solid var(--border-mid);background:var(--bg-glass);
+  color:var(--text-secondary);transition:var(--transition);text-decoration:none;cursor:pointer;
+}
+.cert-btn:hover{background:var(--gradient-1);color:#fff;border-color:transparent}
+.cert-btn.primary{background:var(--accent-glow);color:var(--accent);border-color:rgba(6,182,212,.3)}
+.cert-btn.primary:hover{background:var(--gradient-1);color:#fff;border-color:transparent}
+.certs-empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted)}
+.certs-empty i{font-size:2.5rem;display:block;margin-bottom:12px;opacity:.5}
+
 /* COURSES */
 .courses-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
 .course-card{padding:0;overflow:hidden}
@@ -1342,6 +1392,19 @@ body.lang-bn code,body.lang-bn pre,body.lang-bn .pcp-code,body.lang-bn .pcp-file
   </div>
 </section>
 
+<!-- ==================== CERTIFICATIONS & SECURITY RESEARCH ==================== -->
+<section id="certifications" style="background:rgba(255,255,255,.012)">
+  <div class="container">
+    <div class="section-head" data-aos="fade-up">
+      <div class="eyebrow"><i class="fas fa-shield-halved" style="margin-right:6px"></i>Verified Credentials</div>
+      <h2><span class="gradient-text">Certifications</span> &amp; Security Research</h2>
+      <p>Professional certificates, cybersecurity awards &amp; published vulnerability research.</p>
+    </div>
+    <div class="certs-filter" id="certs-filter" data-aos="fade-up"></div>
+    <div class="certs-grid" id="certs-grid"></div>
+  </div>
+</section>
+
 <!-- ==================== CONTACT ==================== -->
 <section id="contact" style="background:rgba(255,255,255,.012)">
   <div class="container">
@@ -1533,6 +1596,7 @@ body.lang-bn code,body.lang-bn pre,body.lang-bn .pcp-code,body.lang-bn .pcp-file
         <button onclick="adminTab('team')"><i class="fas fa-users"></i> Team Members</button>
         <button onclick="adminTab('courses')"><i class="fas fa-graduation-cap"></i> Courses</button>
         <button onclick="adminTab('reviews')"><i class="fas fa-star"></i> Reviews</button>
+        <button onclick="adminTab('certs')"><i class="fas fa-shield-halved"></i> Certs &amp; Security</button>
         <button onclick="adminTab('ticker')"><i class="fas fa-users-rectangle"></i> Clients Ticker</button>
         <button onclick="adminTab('leads')"><i class="fas fa-inbox"></i> Lead Inbox <span class="badge" id="lead-badge">0</span></button>
         <button onclick="adminTab('firebase')"><i class="fas fa-fire"></i> Firebase Setup</button>
@@ -1961,6 +2025,7 @@ app.post('/login', async (req, res) => {
 };
 
 // Merge portfolio + portfolioExtra into a single array
+DEFAULT_DATA.certificationsAndResearch = DEFAULT_DATA.certificationsAndResearch || [];
 DEFAULT_DATA.portfolio = DEFAULT_DATA.portfolio.concat(DEFAULT_DATA.portfolioExtra);
 delete DEFAULT_DATA.portfolioExtra;
 // Clear placeholder video IDs — admin adds real YouTube embed URLs per item
@@ -2114,7 +2179,7 @@ function loadData(){
       // Merge with defaults so newly added fields are populated for existing users
       STATE.data = _deepMerge(parsed, DEFAULT_DATA);
       // Guard all top-level arrays — corrupted/migrated state may have wrong types
-      ['services','portfolio','categories','team','reviews','courses','codeDemos','liveSites','leads','tickerBrands','tickerPeople'].forEach(k=>{
+      ['services','portfolio','categories','team','reviews','courses','codeDemos','liveSites','leads','tickerBrands','tickerPeople','certificationsAndResearch'].forEach(k=>{
         if(!Array.isArray(STATE.data[k])) STATE.data[k] = Array.isArray(DEFAULT_DATA[k]) ? JSON.parse(JSON.stringify(DEFAULT_DATA[k])) : [];
       });
       // Migrate old contact format: ensure site.contact.rows exists (extra rows beyond fixed ones)
@@ -2531,6 +2596,7 @@ function renderAll(){
   renderTeam();
   renderCourses();
   renderReviews();
+  renderCertifications();
   renderContact();
   // Update lead badge only — do NOT refresh admin tab (it destroys unsaved edits mid-typing)
   $('#lead-badge').textContent = (STATE.data.leads||[]).length;
@@ -2824,6 +2890,69 @@ function renderReviews(){
       </div>
     </div>`;
   }).join('');
+}
+
+/* ===== Certifications & Security Research ===== */
+let _activeCertFilter = 'all';
+function renderCertifications(){
+  const items = STATE.data.certificationsAndResearch || [];
+  const filterEl = $('#certs-filter');
+  const gridEl   = $('#certs-grid');
+  if(!filterEl || !gridEl) return;
+
+  // Build filter tabs
+  const cats = [
+    {k:'all',     label:'All'},
+    {k:'General Certificate',    label:'Certificates'},
+    {k:'Security Award/Badge',   label:'Awards & Badges'},
+    {k:'Vulnerability Report',   label:'Vulnerability Reports'}
+  ];
+  filterEl.innerHTML = cats.map(c=>`
+    <button class="tab-btn${_activeCertFilter===c.k?' active':''}" onclick="_setCertFilter('${c.k}')">
+      ${c.label}${c.k!=='all' ? ' <span style="font-size:.72rem;opacity:.7">('+items.filter(i=>i.category===c.k).length+')</span>' : ''}
+    </button>`).join('');
+
+  // Filter
+  const visible = _activeCertFilter==='all' ? items : items.filter(i=>i.category===_activeCertFilter);
+
+  if(!visible.length){
+    gridEl.innerHTML = `<div class="certs-empty"><i class="fas fa-shield-halved"></i><p>${items.length?'No items in this category yet.':'No certifications or research added yet — use the Admin Panel to add them.'}</p></div>`;
+    return;
+  }
+
+  gridEl.innerHTML = visible.map(c=>{
+    const cat = c.category || 'General Certificate';
+    const typeClass = cat==='Vulnerability Report'?'report': cat==='Security Award/Badge'?'award':'cert';
+    const badgeClass = 'badge-'+typeClass;
+    const icon = cat==='Vulnerability Report'?'fas fa-bug': cat==='Security Award/Badge'?'fas fa-trophy':'fas fa-certificate';
+    const iconColor = cat==='Vulnerability Report'?'var(--rose)': cat==='Security Award/Badge'?'var(--gold)':'var(--accent)';
+
+    const imgPart = c.img
+      ? `<img src="${esc(c.img)}" alt="${esc(c.title)}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\\'cert-img-placeholder\\'><i class=\\'${icon}\\' style=\\'color:${iconColor}\\'></i></div>'"/>`
+      : `<div class="cert-img-placeholder"><i class="${icon}" style="color:${iconColor}"></i></div>`;
+
+    const linkBtn = c.link   ? `<a class="cert-btn primary" href="${esc(safeUrl(c.link))}" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> View</a>` : '';
+    const pdfBtn  = c.pdfLink? `<a class="cert-btn" href="${esc(safeUrl(c.pdfLink))}" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Report PDF</a>` : '';
+
+    return `
+    <div class="cert-card type-${typeClass} glass-card" data-scroll>
+      <div class="cert-img-wrap">
+        ${imgPart}
+        <span class="cert-type-badge ${badgeClass}">${esc(cat)}</span>
+      </div>
+      <div class="cert-body">
+        ${c.issuer ? `<div class="cert-issuer"><i class="fas fa-building" style="margin-right:4px"></i>${esc(c.issuer)}</div>` : ''}
+        <div class="cert-title">${esc(c.title||'')}</div>
+        ${c.desc ? `<div class="cert-desc">${esc(c.desc)}</div>` : ''}
+        ${(linkBtn||pdfBtn) ? `<div class="cert-actions">${linkBtn}${pdfBtn}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function _setCertFilter(cat){
+  _activeCertFilter = cat;
+  renderCertifications();
+  observeScrollItems();
 }
 
 /* Auto-detect FontAwesome icon from social URL */
@@ -3277,6 +3406,7 @@ function adminTab(name){
   else if(name==='team')       renderAdminList(sec, 'team', 'Team Members', teamFields());
   else if(name==='courses')    renderAdminList(sec, 'courses', 'Courses', courseFields());
   else if(name==='reviews')    renderAdminList(sec, 'reviews', 'Client Reviews', reviewFields());
+  else if(name==='certs')      renderAdminList(sec, 'certificationsAndResearch', 'Certifications & Security Research', certFields());
   else if(name==='leads')      renderAdminLeads(sec);
   else if(name==='ticker')     renderAdminTicker(sec);
   else if(name==='firebase')   renderAdminFirebase(sec);
@@ -3347,6 +3477,16 @@ function reviewFields(){ return [
   {k:'text',   label:'Review Text', type:'textarea'},
   {k:'img',    label:'Avatar URL', type:'text'},
   {k:'imgFile', label:'📤 Or Upload Avatar Photo', type:'imgupload', target:'img'}
+];}
+function certFields(){ return [
+  {k:'title',    label:'Title', type:'text', placeholder:'e.g. Google Bug Hunters — AI Safety Bypass Report'},
+  {k:'category', label:'Category', type:'certcategory'},
+  {k:'issuer',   label:'Issuer / Target', type:'text', placeholder:'e.g. Google VRP, Coursera, Google Gemini'},
+  {k:'desc',     label:'Short Description', type:'textarea'},
+  {k:'img',      label:'Certificate / Badge Image URL', type:'text', placeholder:'https://…'},
+  {k:'imgFile',  label:'📤 Or Upload Certificate Image', type:'imgupload', target:'img'},
+  {k:'link',     label:'External Link (optional)', type:'text', placeholder:'https://bughunters.google.com/…'},
+  {k:'pdfLink',  label:'PDF / Report Link (optional)', type:'text', placeholder:'https://…/report.pdf'}
 ];}
 function tickerBrandFields(){ return [
   {k:'name',    label:'Brand Name', type:'text', placeholder:'e.g. Yamaha'},
@@ -3448,6 +3588,7 @@ function getFieldsForKey(key){
     case 'team':       return teamFields();
     case 'courses':    return courseFields();
     case 'reviews':    return reviewFields();
+    case 'certificationsAndResearch': return certFields();
     case 'tickerBrands': return tickerBrandFields();
     case 'tickerPeople': return tickerPersonFields();
   }
@@ -3524,6 +3665,10 @@ function fieldHTML(f, val){
   if(f.type==='category'){
     const cats = STATE.data.categories || [];
     return `<div class="form-row"><label>${esc(f.label)}</label><select name="${f.k}">${cats.map(c=>`<option value="${esc(c.id)}" ${val===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>`;
+  }
+  if(f.type==='certcategory'){
+    const opts = ['General Certificate','Security Award/Badge','Vulnerability Report'];
+    return `<div class="form-row"><label>${esc(f.label)}</label><select name="${f.k}">${opts.map(o=>`<option value="${esc(o)}" ${val===o?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`;
   }
   if(f.type==='imgupload'){
     // Uploads file to Cloudinary (unsigned) → writes secure_url into the target text field
